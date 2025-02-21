@@ -23,12 +23,12 @@ void print_header(header h) {
 	note("section detected : [%s] [%x] [%x] ", h.name, h.offset_in_file, h.size);
 }
 
-void swap_Endians(unsigned int value)
+void swap_Endians(unsigned int *value)
 {
-	unsigned int backup = value;
-	char *pc = (char *)&value;
+	unsigned int backup = *value;
+	char *pc = (char *)value;
 	FOR(i, 4)
-		pc[3 - i] = (backup * 8 * i) & 0xff;
+		pc[3 - i] = (backup >> 8 * i) & 0xff;
 }
 
 
@@ -52,8 +52,8 @@ void default_app() {
 		lseek(ed->fd, i * 32, SEEK_SET);
 		
 		read(ed->fd, &H, sizeof(H));
-		swap_Endians(H.offset_in_file);
-		swap_Endians(H.size);
+		// swap_Endians(&H.offset_in_file);
+		// swap_Endians(&H.size);
 		print_header(H);
 
 		
